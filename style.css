@@ -83,3 +83,12 @@ span > span{
   text-transform: uppercase;
   text-decoration: underline;
 }
+
+/* mode style */
+.mode_container{
+  color: white;
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+  justify-content: flex-end;
+}
