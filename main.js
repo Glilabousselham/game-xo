@@ -154,8 +154,8 @@ function robotPlay() {
   if (mode > 1) {
     
     if (player_positions.length === 1) {
-      const positions = ["s1","s3",'s7',"s9","s5"]
-        position = positions[Math.floor(Math.random() * positions.length)]
+      const positions = ["s1","s3",'s7',"s9","s5"].filter(p=>squares[p]===null)
+      position = positions[Math.floor(Math.random() * positions.length)]
     }else if(player_positions.length === 2){
       position = check_if_can_win(player_positions[0],player_positions[1])
     }else if (player_positions.length === 3) {
