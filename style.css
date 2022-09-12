@@ -9,12 +9,13 @@ body {
 }
 
 .container {
-  width: 400px;
+  width: fit-content;
   margin-top: 20px;
   margin-inline: auto;
   border-radius: 20px;
   border: 4px solid #f6f6f6;
-  padding: 10px;
+  padding: 20px;
+  /* padding-inline: 60px; */
 }
 
 
@@ -64,4 +65,21 @@ body {
 
 .game div:active {
   opacity: .5;
+}
+
+
+/* footer */
+
+footer{
+  border: 4px solid white;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 20px;
+  color: white;
+}
+
+span > span{
+  color: yellow;
+  text-transform: uppercase;
+  text-decoration: underline;
 }
