@@ -16,7 +16,7 @@ document.querySelector("#mode").onchange=(e)=>{
     return window.alert("please select an other option")
   }
 
-  mode = v
+  mode = +v
    e.target.setAttribute("disabled","")
 }
 
@@ -156,23 +156,21 @@ function robotPlay() {
     if (player_positions.length === 1) {
       const positions = ["s1","s3",'s7',"s9","s5"].filter(p=>squares[p]===null)
       position = positions[Math.floor(Math.random() * positions.length)]
-    }else if(player_positions.length === 2){
-      position = check_if_can_win(player_positions[0],player_positions[1])
-    }else if (player_positions.length === 3) {
-      position = check_if_can_win(robot_positions[0],robot_positions[1])
+    }else if( player_positions.length<4){
+      position = check_if_can_win(...robot_positions)
       if (!position) {
         // if player can win
-        position = check_if_can_win(player_positions[0],player_positions[1],player_positions[2])
+        position = check_if_can_win(...player_positions)
         // random position
       }
     }else{
       // hard mode 
       // if robot can winn
       if (mode === 3) {
-          position = check_if_can_win(robot_positions[0],robot_positions[1],robot_positions[2])
+          position = check_if_can_win(...robot_positions)
           if (!position) {
             // check player can win
-            position = check_if_can_win(player_positions[0],player_positions[1],player_positions[2],player_positions[3])
+            position = check_if_can_win(...player_positions)
           }
       }
     }
@@ -198,63 +196,63 @@ function robotPlay() {
 
 function check_if_can_win(s1,s2,s3=null,s4=null){
 
-
-  if (s3===null) {
-    for (let row of rows) {
-      if ( row.includes(s1) && row.includes(s2) ) {
-        const s3 = row.filter(p=>p!==s1&&p!==s2).shift()
-        if (squares[s3]===null) {
-          return s3
-        }
-      }
-    }
-    return false
-  }
-
+  let position = false
   for (let row of rows) {
     if ( row.includes(s1) && row.includes(s2)) {
-      const s3 = row.filter(p=>p!==s1&&p!==s2).shift()
-      if (squares[s3]===null) {
-        return s3
+      const s = row.filter(p=>p!==s1&&p!==s2)[0]
+      if (squares[s]===null) {
+        position = s
+        break
       }
     }
+    if (s3===null) {
+      continue
+    }
     if ( row.includes(s1) && row.includes(s3)) {
-      const s2 = row.filter(p=>p!==s1&&p!==s3).shift()
-      if (squares[s2]===null) {
-        return s2
+      const s = row.filter(p=>p!==s1&&p!==s3)[0]
+      if (squares[s]===null) {
+        position = s
+        break
       }
     }
     if ( row.includes(s2) && row.includes(s3)) {
-      const s1 = row.filter(p=>p!==s2&&p!==s3).shift()
-      if (squares[s1]===null) {
-        return s1
+      const s = row.filter(p=>p!==s2&&p!==s3)[0]
+      if (squares[s]===null) {
+        position = s
+        break
       }
     }
-    if (s4!==null) {
-      if ( row.includes(s1) && row.includes(s4)) {
-        const s = row.filter(p=>p!==s1&&p!==s4).shift()
-        if (squares[s]===null) {
-          return s
-        }
+    if (s4===null) {
+      continue
+    }
+    if ( row.includes(s1) && row.includes(s4)) {
+      const s = row.filter(p=> p !== s1 && p !== s4)[0]
+      if (squares[s]===null) {
+        position = s
+        break
       }
-      if ( row.includes(s2) && row.includes(s4)) {
-        const s = row.filter(p=>p!==s2&&p!==s4).shift()
-        if (squares[s]===null) {
-          return s
-        }
+    }
+    if ( row.includes(s2) && row.includes(s4)) {
+      const s = row.filter(p=>p!==s2&&p!==s4)[0]
+      if (squares[s]===null) {
+        position = s
+        break
       }
-      if ( row.includes(s3) && row.includes(s4)) {
-        const s = row.filter(p=>p!==s3&&p!==s4).shift()
-        if (squares[s]===null) {
-          return s
-        }
+    }
+    if ( row.includes(s3) && row.includes(s4)) {
+      const s = row.filter(p=>p!==s3&&p!==s4)[0]
+      if (squares[s]===null) {
+        position = s
+        break
       }
     }
   }
 
-  return false;
+  return position;
   
 }
 
 // start game
 initializeGame()
+
+
