@@ -63,5 +63,5 @@ body {
 }
 
 .game div:active {
-  opacity: .7;
+  opacity: .5;
 }
