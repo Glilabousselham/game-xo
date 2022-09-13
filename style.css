@@ -92,3 +92,7 @@ span > span{
   padding: 10px;
   justify-content: flex-end;
 }
+
+option{
+  text-transform: uppercase;
+}

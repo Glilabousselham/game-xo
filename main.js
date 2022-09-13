@@ -3,10 +3,7 @@ var squares = {}
 const player = "X"
 const robot = "O"
 var turn;
-var squares_elements = document.querySelectorAll(".square")
-var player_positions ;
 var stop;
-var robot_positions ;
 var counter;
 var mode = 0;
 
@@ -15,9 +12,8 @@ document.querySelector("#mode").onchange=(e)=>{
   if (v === 0) {
     return window.alert("please select an other option")
   }
-
   mode = +v
-   e.target.setAttribute("disabled","")
+  e.target.setAttribute("disabled","")
 }
 
 
@@ -45,11 +41,9 @@ function handlePlayerPlay(e) {
   const position = e.target.id
   squares[position] = player
   e.target.innerText = player
-  player_positions.push(position)
   counter++
   checkWinner()
   changeTurn()
-
   handleRobotPlay()
 }
 
@@ -63,50 +57,22 @@ function changeTurn() {
   turn = turn === player ? robot : player
 }
 
-
-
 function checkWinner() {
   const check = (s1, s2, s3) => squares[s1] === squares[s2] && squares[s1] === squares[s3] && squares[s1] !== null
-  
-
   let winner_squares = []
-  if (check("s1", "s2", "s3")) {
-    winner_squares = ["s1", "s2", "s3"]
+  for(let row of rows){
+    if (!check(...row)) continue
+    winner_squares = row
   }
-  else if (check("s4", "s5", "s6")) {
-    winner_squares = ["s4", "s5", "s6"]
+  if (gameOver()) {
+    setTimeout(() => {
+      initializeGame()
+    }, 2000);
   }
-  else if (check("s7", "s8", "s9")) {
-    winner_squares = ["s7", "s8", "s9"]
-  }
-  else if (check("s1", "s4", "s7")) {
-    winner_squares = ["s1", "s4", "s7"]
-  }
-  else if (check("s2", "s5", "s8")) {
-    winner_squares = ["s2", "s5", "s8"]
-  }
-  else if (check("s3", "s6", "s9")) {
-    winner_squares = ["s3", "s6", "s9"]
-  }
-  else if (check("s1", "s5", "s9")) {
-    winner_squares = ["s1", "s5", "s9"]
-  }
-  else if (check("s3", "s5", "s7")) {
-    winner_squares = ["s3", "s5", "s7"]
-  } else {
-    if (gameOver()) {
-      // 
-      setTimeout(() => {
-        initializeGame()
-      }, 2000);
-    }
-  }
-
   if (winner_squares.length) {
     stop = true
     handleWin(winner_squares)
   }
-
 } 
 
 function handleWin(winner_squares) {
@@ -130,9 +96,7 @@ function initializeGame() {
   let i = 0
   counter = 0
   stop = false
-  player_positions=[]
-  robot_positions=[]
-  squares_elements.forEach(e => {
+  document.querySelectorAll(".square").forEach(e => {
     e.innerText = ""
     e.style.color = "white"
     squares["s" + ++i] = null
@@ -145,112 +109,95 @@ function gameOver(){
  return counter === 9 || stop
 }
 
-
 function robotPlay() {
   if (gameOver()) return
 
-// intermadiate
+  // intermadiate
   var position;
   if (mode > 1) {
-    
-    if (player_positions.length === 1) {
-      const positions = ["s1","s3",'s7',"s9","s5"].filter(p=>squares[p]===null)
-      position = positions[Math.floor(Math.random() * positions.length)]
-    }else if( player_positions.length<4){
-      position = check_if_can_win(...robot_positions)
-      if (!position) {
-        // if player can win
-        position = check_if_can_win(...player_positions)
-        // random position
+    if (getPlaces(player).length === 1) {
+      if (mode<4) {
+        const positions = ["s1","s3",'s7',"s9"]
+        position = positions[Math.floor(Math.random() * positions.length)]
+      }else{
+        if (getPlaces(player)[0]==="s5") {
+          const positions = ["s1","s3",'s7',"s9"]
+          position = positions[Math.floor(Math.random() * positions.length)]
+        }else {
+          position = "s5"
+        }
       }
-    }else{
-      // hard mode 
-      // if robot can winn
-      if (mode === 3) {
-          position = check_if_can_win(...robot_positions)
-          if (!position) {
-            // check player can win
-            position = check_if_can_win(...player_positions)
-          }
+    }else if (getPlaces(player).length === 2 && mode === 4) {
+      const positions = ["s1","s3",'s7',"s9"]
+      if (positions.includes(getPlaces(player)[0]) && positions.includes(getPlaces(player)[1])) {
+        const positions = ["s2","s4",'s6',"s8"]
+        position = positions[Math.floor(Math.random() * positions.length)]
+      }
+    }
+
+
+      // check robot
+    if (!position && mode > 2) {
+      position = check_possibility(robot)
+      if (!position) {
+        // check player can win
+        position = check_possibility(player)
       }
     }
   }
-
-  // eseay
-
+    
+  
   if (!position) {
-    const positions = positions_id.filter(p=>!(player_positions.includes(p) || robot_positions.includes(p)))
+    const positions = positions_id.filter(p=>squares[p]===null)
     position = positions[Math.floor(Math.random() * positions.length)]
   }
- 
-  // const random_square = remainingSquares[randomKey]
+
   squares[position] = robot
   document.querySelector("#"+position).innerText = robot
-  robot_positions.push(position)
   checkWinner()
   changeTurn()
   }
 
+function getPlaces(player){
+  return Object.keys(squares).filter((sq) => {
+    return squares[sq] === player;
+  });
+}
 
 
+function check_possibility(player){
+  const rows = [
+    ["s1", "s2", "s3"],
+    ["s4", "s5", "s6"],
+    ["s7", "s8", "s9"],
+    ["s1", "s4", "s7"],
+    ["s2", "s5", "s8"],
+    ["s3", "s6", "s9"],
+    ["s1", "s5", "s9"],
+    ["s3", "s5", "s7"]
+  ]
 
-function check_if_can_win(s1,s2,s3=null,s4=null){
+  let places = getPlaces(player)
 
-  let position = false
-  for (let row of rows) {
-    if ( row.includes(s1) && row.includes(s2)) {
-      const s = row.filter(p=>p!==s1&&p!==s2)[0]
-      if (squares[s]===null) {
-        position = s
-        break
-      }
-    }
-    if (s3===null) {
-      continue
-    }
-    if ( row.includes(s1) && row.includes(s3)) {
-      const s = row.filter(p=>p!==s1&&p!==s3)[0]
-      if (squares[s]===null) {
-        position = s
-        break
-      }
-    }
-    if ( row.includes(s2) && row.includes(s3)) {
-      const s = row.filter(p=>p!==s2&&p!==s3)[0]
-      if (squares[s]===null) {
-        position = s
-        break
-      }
-    }
-    if (s4===null) {
-      continue
-    }
-    if ( row.includes(s1) && row.includes(s4)) {
-      const s = row.filter(p=> p !== s1 && p !== s4)[0]
-      if (squares[s]===null) {
-        position = s
-        break
-      }
-    }
-    if ( row.includes(s2) && row.includes(s4)) {
-      const s = row.filter(p=>p!==s2&&p!==s4)[0]
-      if (squares[s]===null) {
-        position = s
-        break
-      }
-    }
-    if ( row.includes(s3) && row.includes(s4)) {
-      const s = row.filter(p=>p!==s3&&p!==s4)[0]
-      if (squares[s]===null) {
-        position = s
-        break
+  if (places.length===1) return false
+  
+  for (let p1 of places) {
+    for (let p2 of places) {
+      if (p1===p2) continue
+      for (let row of rows) {
+        if ( row.includes(p1) && row.includes(p2)) {
+          const s = row.filter(p=>p!==p1&&p!==p2)[0]
+          if (squares[s]===null) {
+            return s
+          }
+          break;
+        }
       }
     }
   }
-
-  return position;
-  
+  return false;
 }
+
 
 // start game
 initializeGame()
