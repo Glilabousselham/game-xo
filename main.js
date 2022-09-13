@@ -128,7 +128,7 @@ function robotPlay() {
         }
       }
     }else if (getPlaces(player).length === 2 && mode === 4) {
-      const positions = ["s1","s3",'s7',"s9"]
+      let positions = ["s1","s3",'s7',"s9"]
       if (positions.includes(getPlaces(player)[0]) && positions.includes(getPlaces(player)[1])) {
         positions = ["s2","s4",'s6',"s8"]
         position = positions[Math.floor(Math.random() * positions.length)]
