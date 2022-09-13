@@ -6,6 +6,7 @@ var turn;
 var stop;
 var counter;
 var mode = 0;
+var positions
 
 document.querySelector("#mode").onchange=(e)=>{
   const v = e.target.value
@@ -117,23 +118,23 @@ function robotPlay() {
   if (mode > 1) {
     if (getPlaces(player).length === 1) {
       if (mode<4) {
-        const positions = ["s1","s3",'s7',"s9"]
+        positions = ["s1","s3",'s7',"s9"]
         position = positions[Math.floor(Math.random() * positions.length)]
       }else{
         if (getPlaces(player)[0]==="s5") {
-          const positions = ["s1","s3",'s7',"s9"]
+          positions = ["s1","s3",'s7',"s9"]
           position = positions[Math.floor(Math.random() * positions.length)]
         }else {
           position = "s5"
         }
       }
     }else if (getPlaces(player).length === 2 && mode === 4) {
-      const  positions = ["s1","s3",'s7',"s9"]
+      positions = ["s1","s3",'s7',"s9"]
       if (positions.includes(getPlaces(player)[0]) && positions.includes(getPlaces(player)[1])) {
-        const positions = ["s2","s4",'s6',"s8"]
+        positions = ["s2","s4",'s6',"s8"]
         position = positions[Math.floor(Math.random() * positions.length)]
       }else if(!check_possibility(player)){
-        const positions = ["s1","s3",'s7',"s9"].filter(p=>squares[p]===null)
+        positions = ["s1","s3",'s7',"s9"].filter(p=>squares[p]===null)
         position = positions[Math.floor(Math.random() * positions.length)]
       }
     }
@@ -151,7 +152,7 @@ function robotPlay() {
     
   
   if (!position) {
-    const positions = positions_id.filter(p=>squares[p]===null)
+    positions = positions_id.filter(p=>squares[p]===null)
     position = positions[Math.floor(Math.random() * positions.length)]
   }
 
