@@ -169,16 +169,16 @@ function getPlaces(player){return Object.keys(squares).filter((sq) => squares[sq
 
 
 function check_possibility(target,place=null,place_to_fill=null){
-  const rows = [
-    ["s1", "s2", "s3"],
-    ["s4", "s5", "s6"],
-    ["s7", "s8", "s9"],
-    ["s1", "s4", "s7"],
-    ["s2", "s5", "s8"],
-    ["s3", "s6", "s9"],
-    ["s1", "s5", "s9"],
-    ["s3", "s5", "s7"]
-  ]
+  // const rows = [
+  //   ["s1", "s2", "s3"],
+  //   ["s4", "s5", "s6"],
+  //   ["s7", "s8", "s9"],
+  //   ["s1", "s4", "s7"],
+  //   ["s2", "s5", "s8"],
+  //   ["s3", "s6", "s9"],
+  //   ["s1", "s5", "s9"],
+  //   ["s3", "s5", "s7"]
+  // ]
 
   const copySquares = {...squares}
 
@@ -213,13 +213,14 @@ function check_possibility(target,place=null,place_to_fill=null){
 function checkPlaceCanMakeTwePossibilies(target,place_to_avoid=null){
   let emptyPlaces = getPlaces(null)
 
-  for (place of emptyPlaces) {
-    if (place === place_to_avoid) continue
-    
+  if (place_to_avoid!== null) {
+    emptyPlaces = emptyPlaces.filter(p=>p!==place_to_avoid)
+  }
 
+  for (place of emptyPlaces) {
+    
     const check1 = check_possibility(target,place)
     if (check1) {
-      // position = place
       const check2 = check_possibility(target,place,check1)
       if (check2) {
         return place
@@ -247,21 +248,20 @@ function checkPlaceCanMakeOnePossibility(target){
 function checkTwePlacesCanMakeTwePossibilies(target) {
   let position1 = false;
   
-  
   position1  = checkPlaceCanMakeTwePossibilies(target)
   
   if (position1) {
     let position2 = false;
     position2 = checkPlaceCanMakeTwePossibilies(target,position1)
     if (position2) {
-      let enime = target===player?robot:player
-      if (squares["s5"] === enime) {
+      if (squares["s5"] === robot) {
         const emptyPlaces = getPlaces(null).filter(p=>![position1,position2].includes(p))
         return emptyPlaces[Math.floor(Math.random()*emptyPlaces.length)]
       }
-      return position1
-      
-
+      if (+position1.split("")[1]%2===1) {
+        return position1
+      }
+      return position2
     }
   }
   return position1
@@ -271,18 +271,22 @@ function checkAllPossibilities() {
   let position = false
   // if i can win
   position = check_possibility(robot)
+  // console.log("check_possibility(robot)",position);
   if (position) return position
 
   // if player can win
   position = check_possibility(player)
+  // console.log("check_possibility(player)",position);
   if (position) return position
 
   // if i can mak to possibility of win
   position = checkTwePlacesCanMakeTwePossibilies(robot)
+  // console.log("checkTwePlacesCanMakeTwePossibilies(robot)",position);
   if (position) return position
 
   // if player can mak to possibility of win
   position = checkTwePlacesCanMakeTwePossibilies(player)
+  // console.log("checkTwePlacesCanMakeTwePossibilies(player)",position);
   if (position) return position
 
   return position
