@@ -254,7 +254,7 @@ function checkTwePlacesCanMakeTwePossibilies(target) {
     let position2 = false;
     position2 = checkPlaceCanMakeTwePossibilies(target,position1)
     if (position2) {
-      if (squares["s5"] === robot) {
+      if (+position1.split("")[1]%2===1 && +position2.split("")[1]%2===1) {
         const emptyPlaces = getPlaces(null).filter(p=>![position1,position2].includes(p))
         return emptyPlaces[Math.floor(Math.random()*emptyPlaces.length)]
       }
