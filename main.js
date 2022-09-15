@@ -7,17 +7,6 @@ var stop;
 var counter;
 var positions
 var who_played_first = robot;
-// var game_data = ""
-
-// document.querySelector("#mode").onchange=(e)=>{
-//   const v = e.target.value
-//   if (v === 0) {
-//     return window.alert("please select an other option")
-//   }
-//   mode = +v
-//   e.target.setAttribute("disabled","")
-// }
-
 
 var positions_id = ["s1", "s2", "s3","s4", "s5", "s6","s7", "s8", "s9"] 
 
@@ -77,14 +66,6 @@ function checkWinner() {
 function handleWin(winner_squares) {
   let winner = squares[winner_squares[0]] === player ? "player" : "robot";
 
-  // try {
-  //   // send game to the server
-  //   postData(winner,game_data)
-  // } catch (error) {
-  //   console.log(error);
-  // }
-
-
   for (let s of winner_squares) {
     document.querySelector("#" + s).style.color = "yellow"
   }
@@ -97,7 +78,7 @@ function handleWin(winner_squares) {
 
 function initializeGame() {
 
-  changeWHoPlayedFirst()
+  changeWhoPlayedFirst()
 
   turn = who_played_first
   stop = false
@@ -117,7 +98,7 @@ function initializeGame() {
   }
 }
 
-function changeWHoPlayedFirst(){
+function changeWhoPlayedFirst(){
   if(who_played_first === null) {
     who_played_first = player
   }else{
@@ -162,36 +143,6 @@ async function robotAttack(){
 
   position = checkAllPossibilities()
   
-
-
-  // if (getPlaces(robot).length>=2) {
-  //   position = check_possibility(robot)
-  //   // console.log("robot possibility",position);
-  //   if (position) return position
-
-  //   position = check_possibility(player)
-  //   // console.log("player posibility",position);
-  //   if (position) return position
-  // }
-
-  // // check history
-  // try {
-  //   let data = game_data.replace("r","s")
-  //   data = data.replace("p","r")
-  //   data = data.replace("s","p")
-  //   // console.log("game data",game_data);
-  //   // console.log("data",data);
-  //   let game = (await getData("player",data)).games.game
-  //   if (game) {
-  //    game = game.split("-").filter(p=>p.startsWith("p")).map(p=>p.replace("p","s"))
-  //    position = game[getPlaces(robot).length] 
-  //    console.log("history",position);
-  //   }
-  // } catch (error) {
-  //   // console.log(error);
-  // }
-
-
   
   return position
 }
@@ -210,33 +161,8 @@ async function robotDefense(){
 
   position = checkAllPossibilities()
 
-
-
-
-      // check hestoies
-      // try {
-      //   game = (await getData("player",game_data)).games.game // never mind about games but the resolt is 1 game or none
-      //   // console.log(game);
-      //   if (game) {
-      //     let player_positions_history =  game.split("-").filter(p=>p.startsWith("p")).map(p=>p.replace("p","s"))
-      //     position =player_positions_history[ getPlaces(player).length]
-      //     // console.log("player history win",position);
-      //   }
-      // } catch (error) {
-      //   // console.log(error);
-      // }
-      // // check robot
-      // if (!position) {
-      //   position = check_possibility(robot)
-      //   if (!position) {
-      //     // check player can win
-      //     position = check_possibility(player)
-      //   }
-      // }
-  
   return position
 }
-
 
 
 function getPlaces(player){return Object.keys(squares).filter((sq) => squares[sq] === player)}
@@ -328,8 +254,6 @@ function checkTwePlacesCanMakeTwePossibilies(target) {
     let position2 = false;
     position2 = checkPlaceCanMakeTwePossibilies(target,position1)
     if (position2) {
-      // avoid the twe
-      // and return 
       let enime = target===player?robot:player
       if (squares["s5"] === enime) {
         const emptyPlaces = getPlaces(null).filter(p=>![position1,position2].includes(p))
@@ -347,73 +271,23 @@ function checkAllPossibilities() {
   let position = false
   // if i can win
   position = check_possibility(robot)
-  // console.log("check_possibility(robot)",position);
   if (position) return position
 
   // if player can win
   position = check_possibility(player)
-  // console.log("check_possibility(player)",position);
   if (position) return position
 
   // if i can mak to possibility of win
   position = checkTwePlacesCanMakeTwePossibilies(robot)
-  // console.log("checkPlaceCanMakeTwePossibilies(robot)",position);
   if (position) return position
 
   // if player can mak to possibility of win
   position = checkTwePlacesCanMakeTwePossibilies(player)
-  // console.log("checkTwePlacesCanMakeTwePossibilies(player)",position);
   if (position) return position
 
   return position
 }
 
-
-
-// const host = window.location.host.split(":")[0]
-
-// function postData(winner,game) {
-//   game = game.split("-")
-//   game.splice(-1)
-//   game = game.join("-")
-//   console.log(game);
-//   fetch(`http://${host}:8000/api/game`, {
-      
-//       // Adding method type
-//       method: "POST",
-      
-//       // Adding body or contents to send
-//       body: JSON.stringify({
-//           winner,game
-//       }),
-      
-//       // Adding headers to the request
-//       headers: {
-//           "Content-type": "application/json; charset=UTF-8"
-//       }
-//   }).then(res=>res.json())
-//   .then(res=>{console.log(res);})
-// }
-
-// function getData(winner,game) {
-
-//   const query = `winner=${winner}&game=${game}`
-//   return new Promise((resolve,reject)=>{
-//     fetch(`http://${host}:8000/api/game?`+query, {
-        
-//         // Adding method type
-//         method: "GET",
-        
-//         // Adding headers to the request
-//         headers: {
-//             "Content-type": "application/json; charset=UTF-8"
-//         }
-//     })
-//     .then(res=>res.json())
-//     .then(res=>{resolve(res)})
-//     .catch(err=>{reject(err)})
-//   })
-// }
 
 
 
