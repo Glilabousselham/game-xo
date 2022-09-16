@@ -85,7 +85,6 @@ function initializeGame() {
   let i = 0
   counter = 0
   stop = false
-  game_data = ""
   document.querySelectorAll(".square").forEach(e => {
     e.innerText = ""
     e.style.color = "white"
@@ -291,9 +290,6 @@ function checkAllPossibilities() {
 
   return position
 }
-
-
-
 
 // start game
 initializeGame()
