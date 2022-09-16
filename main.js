@@ -1,4 +1,3 @@
-
 var squares = {}
 const player = "X"
 const robot = "O"
@@ -8,7 +7,6 @@ var counter;
 var positions
 var who_played_first = robot;
 
-var positions_id = ["s1", "s2", "s3","s4", "s5", "s6","s7", "s8", "s9"] 
 
 const rows = [
   ["s1", "s2", "s3"],
@@ -22,11 +20,11 @@ const rows = [
 ]
 
 
+
 function playerPlay(e) {
 
   if (e.target.innerText !== "" || !(turn === player) || gameOver()) return
   const position = e.target.id
-  game_data += position.replace("s","p")+"-"
   squares[position] = player
   e.target.innerText = player
   counter++
@@ -65,6 +63,8 @@ function checkWinner() {
 
 function handleWin(winner_squares) {
   let winner = squares[winner_squares[0]] === player ? "player" : "robot";
+
+ 
 
   for (let s of winner_squares) {
     document.querySelector("#" + s).style.color = "yellow"
@@ -123,7 +123,6 @@ async function handleRobotPlay() {
     position = positions[Math.floor(Math.random() * positions.length)]
   }
 
-  game_data += position.replace("s","r")+"-"
   squares[position] = robot
   document.querySelector("#"+position).innerText = robot
   checkWinner()
@@ -168,17 +167,6 @@ function getPlaces(player){return Object.keys(squares).filter((sq) => squares[sq
 
 
 function check_possibility(target,place=null,place_to_fill=null){
-  // const rows = [
-  //   ["s1", "s2", "s3"],
-  //   ["s4", "s5", "s6"],
-  //   ["s7", "s8", "s9"],
-  //   ["s1", "s4", "s7"],
-  //   ["s2", "s5", "s8"],
-  //   ["s3", "s6", "s9"],
-  //   ["s1", "s5", "s9"],
-  //   ["s3", "s5", "s7"]
-  // ]
-
   const copySquares = {...squares}
 
   let places = getPlaces(target)
