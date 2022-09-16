@@ -5,7 +5,7 @@ var turn;
 var stop;
 var counter;
 var positions
-var who_played_first = robot;
+var who_played_first = player;
 
 
 const rows = [
@@ -198,6 +198,16 @@ function check_possibility(target,place=null,place_to_fill=null){
 }
 
 function checkPlaceCanMakeTwePossibilies(target,place_to_avoid=null){
+
+  /**
+   * @target
+   * the player should search for the possiblities for it
+   */
+ /**
+   * @place_to_avoid
+   * is a empty place (position ) to avoid it from the test
+   */
+
   let emptyPlaces = getPlaces(null)
 
   if (place_to_avoid!== null) {
@@ -266,10 +276,16 @@ function checkAllPossibilities() {
   // console.log("check_possibility(player)",position);
   if (position) return position
 
-  // if i can mak to possibility of win
-  position = checkTwePlacesCanMakeTwePossibilies(robot)
-  // console.log("checkTwePlacesCanMakeTwePossibilies(robot)",position);
+  // // if i can mak to possibility of win
+  position = checkPlaceCanMakeTwePossibilies(robot)
+  // console.log("checkPlaceCanMakeTwePossibilies(robot)",position);
   if (position) return position
+
+    // // if i can mak to possibility of win
+  position = checkPlaceCanMakeOnePossibility(robot)
+  // console.log("checkPlaceCanMakeOnePossibility(robot)",position);
+  if (position) return position
+
 
   // if player can mak to possibility of win
   position = checkTwePlacesCanMakeTwePossibilies(player)
