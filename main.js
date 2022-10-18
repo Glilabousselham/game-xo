@@ -5,7 +5,7 @@ var turn;
 var stop;
 var counter;
 var positions
-var who_played_first = player;
+var who_played_first = robot;
 
 
 const rows = [
@@ -281,17 +281,17 @@ function checkAllPossibilities() {
   // console.log("checkPlaceCanMakeTwePossibilies(robot)",position);
   if (position) return position
 
-    // // if i can mak to possibility of win
-  position = checkPlaceCanMakeOnePossibility(robot)
-  // console.log("checkPlaceCanMakeOnePossibility(robot)",position);
-  if (position) return position
-
-
+  
+  
   // if player can mak to possibility of win
   position = checkTwePlacesCanMakeTwePossibilies(player)
   // console.log("checkTwePlacesCanMakeTwePossibilies(player)",position);
   if (position) return position
-
+  
+  // if i can mak to possibility of win
+position = checkPlaceCanMakeOnePossibility(robot)
+// console.log("checkPlaceCanMakeOnePossibility(robot)",position);
+if (position) return position
   return position
 }
 
